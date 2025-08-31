@@ -8,5 +8,12 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
+    "@tailwindcss/cli": "^4.1.12",
+    "bun-plugin-tailwind": "^0.0.15",
+    "neondatabase": "^0.0.1-security",
+    "tailwindcss": "^4.1.12"
   }
 }
