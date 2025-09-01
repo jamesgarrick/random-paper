@@ -10,7 +10,7 @@ console.log("Index.ts...")
 
 
 serve({
-  port: 80,
+  port: 3000,
   hostname: "0.0.0.0",
   routes: {
     "/": mainHTML,
