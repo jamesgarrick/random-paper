@@ -15,20 +15,20 @@ serve({
     "/": mainHTML,
     "/api/random": {
       GET: async req => {
-        const rows = await sql`SELECT abstract, authors from arxiv_metadata LIMIT 1`
+        const rows = await sql`
+        SELECT abstract, authors, title
+        FROM arxiv_metadata
+        ORDER BY RANDOM()
+        LIMIT 1`;
         const abstract = rows[0].abstract || "";
         const authors = rows[0].authors || "";
+        const title = rows[0].title || "";
         console.log(abstract, authors);
 
-        return new Response(`<div>
-          <h2>Authors</h2>
-          <p>${authors}</p>
-          <h2>Abstract</h2>
-          <p>${abstract}</p>
-        </div>`, {
-          headers: {
-            "Content-Type": "text/html"
-          }
+
+
+        return new Response(JSON.stringify({ abstract, authors, title }), {
+          headers: { "Content-Type": "application/json" },
         });
       },
     },
