@@ -1,33 +1,32 @@
-# Stage 1: Dependency Installation and Build (if applicable)
+# Stage 1: Dependency Installation and Build
 FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
-# Copy package.json and bun.lock first to leverage Docker cache
+# Copy package.json and bun.lock first
 COPY package.json bun.lock ./
 
-# Install dependencies with --frozen-lockfile for reproducible builds
+# Install dependencies
 RUN bun install --frozen-lockfile
 
-# Copy your application source code
+# Copy source code
 COPY . .
 
-# If your application requires a build step (e.g., for production builds)
-# RUN bun run build
-
-# Stage 2: Final Image (smaller, production-ready)
+# Stage 2: Final Image
 FROM oven/bun:latest
 
 WORKDIR /app
 
-# Copy only necessary files from the builder stage
+# Copy from builder stage
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/bun.lock ./bun.lock
-COPY --from=builder /app .
+# Fix: Don't copy the entire /app again, be more specific
+COPY --from=builder /app/*.js ./
+COPY --from=builder /app/*.ts ./
+COPY --from=builder /app/src ./src
+# Add other specific files/folders your app needs
 
-# Expose the port your Bun server listens on
-EXPOSE 3000
+EXPOSE 3001
 
-# Command to start your Bun server
-ENTRYPOINT ["bun", "run", "start"]
+CMD ["bun", "run", "start"]
