@@ -15,5 +15,8 @@
     "bun-plugin-tailwind": "^0.0.15",
     "neondatabase": "^0.0.1-security",
     "tailwindcss": "^4.1.12"
-  }
+  },
+  "scripts": {
+  "start": "bun index.ts"
+}
 }
