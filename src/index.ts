@@ -1,6 +1,11 @@
 import mainHTML from "./index.html";
 import { serve } from "bun";
 
+console.log("=== DEBUGGING ENVIRONMENT VARIABLES ===");
+console.log("All environment variables:");
+console.log(JSON.stringify(process.env, null, 2));
+console.log("=== END DEBUG ===");
+
 const { neon } = require("@neondatabase/serverless");
 
 const sql = neon(process.env.DATABASE_URL);
