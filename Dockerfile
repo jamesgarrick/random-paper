@@ -3,8 +3,8 @@ FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
-# Copy package.json and bun.lockb first to leverage Docker cache
-COPY package.json bun.lockb ./
+# Copy package.json and bun.lock first to leverage Docker cache
+COPY package.json bun.lock ./
 
 # Install dependencies with --frozen-lockfile for reproducible builds
 RUN bun install --frozen-lockfile
@@ -23,7 +23,7 @@ WORKDIR /app
 # Copy only necessary files from the builder stage
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/bun.lockb ./bun.lockb
+COPY --from=builder /app/bun.lock ./bun.lock
 COPY --from=builder /app/src .
 
 # Expose the port your Bun server listens on
