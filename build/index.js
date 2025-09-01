@@ -4933,7 +4933,8 @@ var { neon } = require_serverless();
 var sql = neon(process.env.DATABASE_URL);
 console.log("Index.ts...");
 serve({
-  port: 3000,
+  port: 443,
+  hostname: "0.0.0.0",
   routes: {
     "/": random_paper_default,
     "/api/random": {

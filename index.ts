@@ -10,7 +10,8 @@ console.log("Index.ts...")
 
 
 serve({
-  port: 3000,
+  port: 443,
+  hostname: "0.0.0.0",
   routes: {
     "/": mainHTML,
     "/api/random": {
