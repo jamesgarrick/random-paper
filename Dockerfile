@@ -1,37 +1,33 @@
-# use the official Bun image
-# see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1 AS base
-WORKDIR /usr/src/app
+# Stage 1: Dependency Installation and Build (if applicable)
+FROM oven/bun:latest AS builder
 
-# install dependencies into temp directory
-# this will cache them and speed up future builds
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lock /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+WORKDIR /app
 
-# install with --production (exclude devDependencies)
-RUN mkdir -p /temp/prod
-COPY package.json bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+# Copy package.json and bun.lockb first to leverage Docker cache
+COPY package.json bun.lockb ./
 
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
-FROM base AS prerelease
-COPY --from=install /temp/dev/node_modules node_modules
+# Install dependencies with --frozen-lockfile for reproducible builds
+RUN bun install --frozen-lockfile
+
+# Copy your application source code
 COPY . .
 
-# [optional] tests & build
-ENV NODE_ENV=production
-RUN bun test || echo "No tests found, skipping..."
+# If your application requires a build step (e.g., for production builds)
+# RUN bun run build
 
-# copy production dependencies and source code into final image
-FROM base AS release
-COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app .
+# Stage 2: Final Image (smaller, production-ready)
+FROM oven/bun:latest
 
+WORKDIR /app
 
-# run the app
-USER bun
-EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "run", "index.ts" ]
+# Copy only necessary files from the builder stage
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/bun.lockb ./bun.lockb
+COPY --from=builder /app/src .
+
+# Expose the port your Bun server listens on
+EXPOSE 3000
+
+# Command to start your Bun server
+CMD ["bun", "run", "start"] # Assuming 'start' script in package.json
