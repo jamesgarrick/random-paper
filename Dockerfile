@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/bun.lock ./bun.lock
-COPY --from=builder /app/src .
+COPY --from=builder /app .
 
 # Expose the port your Bun server listens on
 EXPOSE 3000
