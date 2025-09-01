@@ -17,6 +17,6 @@
     "tailwindcss": "^4.1.12"
   },
   "scripts": {
-  "start": "bun index.ts"
+  "start": "bun src/index.ts"
 }
 }
