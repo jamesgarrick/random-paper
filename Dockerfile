@@ -2,7 +2,7 @@ FROM oven/bun:latest
 
 WORKDIR /app
 
-# Copy package files first (for better caching)
+# Copy package files
 COPY package.json bun.lock ./
 
 # Install dependencies

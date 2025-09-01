@@ -1,18 +1,8 @@
 import mainHTML from "./index.html";
 import { serve } from "bun";
-
-console.log("=== DEBUGGING ENVIRONMENT VARIABLES ===");
-console.log("All environment variables:");
-console.log(JSON.stringify(process.env, null, 2));
-console.log("=== END DEBUG ===");
-
 const { neon } = require("@neondatabase/serverless");
 
 const sql = neon(process.env.DATABASE_URL);
-
-
-console.log("Index.ts...")
-
 
 serve({
   port: 3000,
@@ -29,9 +19,6 @@ serve({
         const abstract = rows[0].abstract || "";
         const authors = rows[0].authors || "";
         const title = rows[0].title || "";
-        console.log(abstract, authors);
-
-
 
         return new Response(JSON.stringify({ abstract, authors, title }), {
           headers: { "Content-Type": "application/json" },
