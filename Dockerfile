@@ -30,4 +30,4 @@ COPY --from=builder /app .
 EXPOSE 3000
 
 # Command to start your Bun server
-CMD ["bun", "run", "start"] # Assuming 'start' script in package.json
+ENTRYPOINT ["bun", "run", "start"]
